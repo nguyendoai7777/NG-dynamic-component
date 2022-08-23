@@ -1,0 +1,19 @@
+.tabs-body-root {
+  display: block;
+  border-radius: 0 0 8px 8px;
+  border-left: 1px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  min-height: 100px;
+  overflow: hidden;
+}
+.tab-body {
+}
+.tab-body-group {
+  display: flex;
+  width: 100%;
+  & > * {
+    flex: none;
+    width: 100%;
+  }
+}

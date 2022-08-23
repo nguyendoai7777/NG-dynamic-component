@@ -1,0 +1,15 @@
+<div class="tab-header" [hidden]="error">
+  <div class="tab-header-group">
+    <div
+      #tabItemList
+      *ngFor="let h of tabHeaderList; index as i"
+      [style.color]="i === activeIndex ? colorPalette : 'rgba(0,0,0,0.6)'"
+      class="tab-header-item"
+      (click)="changeTab(tabItemList, {index: i, name: h})"
+    >{{h}}</div>
+  </div>
+  <div class="surfing-ink-bar" #inkBar></div>
+</div>
+
+<div [hidden]="!error" style="font-family: inherit; color: red">{{error}}</div>
+
