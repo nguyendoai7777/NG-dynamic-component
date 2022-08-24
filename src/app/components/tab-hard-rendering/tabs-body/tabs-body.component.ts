@@ -10,7 +10,8 @@ export class TabsBodyComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild('translateBox') translateBox!: ElementRef<HTMLElement>;
   @Input() tabsHeaderLength = 0;
   @Input() currentTabHeaderIndex = 0;
-  changeTime = 0
+  changeTime = 0;
+
   constructor(
     private readonly elr: ElementRef<HTMLElement>
   ) {
@@ -19,17 +20,17 @@ export class TabsBodyComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges) {
     this.changeTime++;
-    if(this.changeTime > 1) {
+    if (this.changeTime > 1) {
       this.surfing();
     }
   }
 
   ngOnInit(): void {
-    const contentList = this.elr.nativeElement.children[0].children
+    const contentList = this.elr.nativeElement.children[0].children;
     const nodeList = Array.from(contentList) as unknown as HTMLElement[];
-    console.log(this.elr.nativeElement.children[0])
+    console.log(this.elr.nativeElement.children[0]);
     const contentLength = nodeList.length;
-    if(this.tabsHeaderLength !== contentLength) {
+    if (this.tabsHeaderLength !== contentLength) {
       return console.error('children (content length) must me equal tabsHeaderLength. content length = ', contentLength, '& tabsHeaderLength = ', this.tabsHeaderLength);
     }
   }
