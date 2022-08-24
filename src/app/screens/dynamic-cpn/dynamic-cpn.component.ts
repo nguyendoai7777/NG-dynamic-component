@@ -10,8 +10,7 @@ export class DynamicCpnComponent implements OnInit {
   @ViewChild(DynamicCpnDirective, {static: true, read: ViewContainerRef}) vcRef!: ViewContainerRef;
   x = -1;
 
-  constructor() {
-  }
+  constructor() { }
 
   ngOnInit(): void {
     console.log(this.vcRef);
@@ -26,7 +25,8 @@ export class DynamicCpnComponent implements OnInit {
     if(this.x !== 1) {
       this.clear();
       const {ComponentOneComponent} = await import('./component-one/component-one.component');
-      this.vcRef.createComponent(ComponentOneComponent);
+      const createInstance = this.vcRef.createComponent(ComponentOneComponent);
+      createInstance.instance.x = Math.random();
     }
     this.x = 1;
   }
