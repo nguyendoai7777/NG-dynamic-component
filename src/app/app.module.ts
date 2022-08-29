@@ -16,6 +16,7 @@ import { TabBsGroupComponent } from './components/tab-dynamic-redering/tab-bs-gr
 import { TabContentDirective } from './directives/tab-content.directive';
 import { CounterComponent } from './components/tab-dynamic-redering/counter.component';
 import { TransformDirective } from './directives/transform.directive';
+import { CircleComponent } from './screens/canvas/circle/circle.component';
 
 @NgModule({
   declarations: [

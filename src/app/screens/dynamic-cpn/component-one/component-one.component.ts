@@ -9,8 +9,6 @@ export class ComponentOneComponent implements OnInit {
   x = x++;
   constructor() { }
 
-  ngOnInit(): void {
-    console.log('1 init')
-  }
+  ngOnInit(): void {}
 
 }

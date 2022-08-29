@@ -11,8 +11,6 @@ export class ComponentTwoComponent implements OnInit {
   b = b++;
   constructor() { }
 
-  ngOnInit(): void {
-    console.log('2 init')
-  }
+  ngOnInit(): void {}
 
 }
