@@ -17,6 +17,7 @@ import { TabContentDirective } from './directives/tab-content.directive';
 import { CounterComponent } from './components/tab-dynamic-redering/counter.component';
 import { TransformDirective } from './directives/transform.directive';
 import { CircleComponent } from './screens/canvas/circle/circle.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { CircleComponent } from './screens/canvas/circle/circle.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

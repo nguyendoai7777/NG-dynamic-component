@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'circle',
     loadComponent: () => import('./screens/canvas/circle/circle.component').then((c) => c.CircleComponent)
+  },
+  {
+    path: 'wow',
+    loadComponent: () => import('./screens/wow/wow.component').then((c) => c.WowComponent)
   }
 ];
 
