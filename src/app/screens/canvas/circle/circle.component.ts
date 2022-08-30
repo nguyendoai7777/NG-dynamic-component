@@ -1,6 +1,10 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
-
+import { Circle } from './circle';
+interface MouseCoordinates {
+  x: number | undefined;
+  y: number | undefined;
+}
 @Component({
   selector: 'circle',
   standalone: true,
@@ -18,49 +22,21 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 export class CircleComponent implements OnInit {
   @ViewChild('circle', {static: true}) canvas!: ElementRef<HTMLCanvasElement>;
   ctx!: CanvasRenderingContext2D;
-  circle = 20;
+  circle = 500;
   list: Circle[] = [];
+  mouse: MouseCoordinates = {
+    x: undefined, y: undefined
+  };
 
   constructor(
     @Inject(DOCUMENT) document: Document
   ) {
   }
 
-  renderRandomColor(min = 0, max = 16777215) {
-    const x = Math.round(Math.random() * (max - min) + min);
-    const y = x.toString(16);
-    const z = `${y}fffffff`.slice(0, 6);
-    const color = `#${z}`;
-    return `#${z}`;
-  }
-
-  createX() {
-    const x = Math.random() * this.canvas.nativeElement.width;
-    return Math.floor(Math.random() * this.canvas.nativeElement.width);
-  }
-
-  createY() {
-    return Math.floor(Math.random() * this.canvas.nativeElement.height);
-  }
-
-  setup() {
-    this.ctx = this.canvas.nativeElement.getContext("2d")!;
-    this.canvas.nativeElement.width = innerWidth;
-    this.canvas.nativeElement.height = innerHeight;
-
-    document.addEventListener("resize", (e) => {
-
-      this.canvas.nativeElement.width = innerWidth;
-      this.canvas.nativeElement.height = innerHeight;
-    });
-  }
 
   ngOnInit(): void {
     this.setup();
     this.init();
-    let mouse = {
-      x: null, y: null
-    };
     this.animate();
   }
 
@@ -74,71 +50,49 @@ export class CircleComponent implements OnInit {
     requestAnimationFrame(this.animate.bind(this));
     this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     this.list.forEach(circle => {
-      circle.update({canvas: this.canvas.nativeElement, context: this.ctx});
+      circle.update({canvas: this.canvas.nativeElement, context: this.ctx, mouse: {x: this.mouse.x!, y: this.mouse.y!}});
     });
   }
-}
 
-interface Velocity {
-  x: number;
-  y: number;
-}
-
-interface CircleInstance {
-  x: number,
-  y: number,
-  radius: number,
-  bgColor: string;
-  speedX?: number;
-  speedY?: number;
-  velocity?: Velocity;
-}
-
-class Circle implements CircleInstance {
-  x: number;
-  y: number;
-  radius: number;
-  bgColor: string;
-  speedX: number;
-  speedY: number;
-  velocity: Velocity;
-
-  constructor(properties: CircleInstance) {
-    console.log(properties);
-    this.x = properties.x;
-    this.y = properties.y;
-    this.radius = properties.radius;
-    this.bgColor = properties.bgColor;
-    this.speedX = 5;
-    this.speedY = 5;
-    this.velocity = {
-      x: 5,
-      y: 5,
-    };
+  renderRandomColor(min = 0, max = 16777215) {
+    const x = Math.round(Math.random() * (max - min) + min);
+    const y = x.toString(16);
+    const z = `${y}fffffff`.slice(0, 6);
+    return `#${z}`;
   }
 
-  draw(context: CanvasRenderingContext2D) {
-    context.beginPath();
-    context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-    context.fillStyle = this.bgColor;
-    context.fill();
-    context.closePath();
+  createX() {
+    return Math.floor(Math.random() * this.canvas.nativeElement.width);
   }
 
-  checkCollision(canvas: HTMLCanvasElement) {
-    if (this.x >= canvas.width || this.x <= 0) {
-      this.velocity.x = -this.velocity.x;
-    }
-    if (this.y >= canvas.height || this.y <= 0) {
-      this.velocity.y = -this.velocity.y;
-    }
+  createY() {
+    return Math.floor(Math.random() * this.canvas.nativeElement.height);
   }
 
-  update({canvas, context}: { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D }) {
-    this.x = this.velocity.x;
-    this.y += this.velocity.y;
-    this.checkCollision(canvas);
-    this.draw(context);
+  setup() {
+    this.ctx = this.canvas.nativeElement.getContext("2d")!;
+    this.canvas.nativeElement.width = innerWidth - 19;
+    this.canvas.nativeElement.height = innerHeight;
+    window.addEventListener("resize", () => {
+      this.canvas.nativeElement.width = innerWidth - 19;
+      this.canvas.nativeElement.height = innerHeight;
+    });
+    window.addEventListener("mousemove", event => {
+      if(!this.mouse.x) {
+        this.mouse.x = 0
+      }
+      this.mouse.x = event.clientX;
+      this.mouse.y = event.clientY;
+    });
+
+    this.canvas.nativeElement.addEventListener("mouseleave", (event) => {
+      if(event.clientY <= 0 || event.clientX <= 0 || (event.clientX >= window.innerWidth || event.clientY >= window.innerHeight)) {
+        this.mouse =  {
+          x: undefined,
+          y: undefined
+        }
+      }
+    });
   }
 
 }
