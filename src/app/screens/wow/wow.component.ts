@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
+import { BehaviorSubject, Observable } from 'rxjs';
 declare class WOW {
   boxes: any;
   init(): void;
@@ -14,12 +15,12 @@ declare class WOW {
     <div class="d-flex">
       <cdk-virtual-scroll-viewport itemSize="50" style="height: 70vh; width: 50%;">
 
-          <div *cdkVirtualFor="let ani of animate; index as i" #list [className]="'wow item animate__animated animate__' + ani"></div>
+          <div *cdkVirtualFor="let ani of animate; index as i; trackBy: trackById" #list [className]="'wow item animate__animated animate__' + ani"></div>
 
       </cdk-virtual-scroll-viewport>
 
       <div style="height: 70vh; width: 50%; overflow: auto">
-          <div *ngFor="let _ of li; index as i" class="item animated slideInRight animate__animated animate__slideInLeft" data-wow-offset="10"></div>
+          <div *ngFor="let _ of li; index as i; trackBy: trackById" class="item animated slideInRight animate__animated animate__slideInLeft" data-wow-offset="10"></div>
         </div>
 
     </div>
@@ -36,6 +37,7 @@ declare class WOW {
 })
 export class WowComponent implements OnInit {
   @ViewChildren('list') list!: QueryList<ElementRef<HTMLElement>>;
+  @ViewChild(CdkVirtualScrollViewport) cdkViewport!: CdkVirtualScrollViewport
   li: any[] = [];
   animate = [
     'slideInLeft',
@@ -136,7 +138,10 @@ export class WowComponent implements OnInit {
     'slideOutLeft',
     'slideOutRight',
     'slideOutUp',
-  ]
+  ];
+  offset$ = new BehaviorSubject(null);
+  infinite$!: Observable<any[]>;
+  isEndOfList = false;
   constructor() {
     this.animate.forEach((e) => {
       this.li.push(e)
@@ -145,8 +150,22 @@ export class WowComponent implements OnInit {
     wow.init();
   }
 
-  ngOnInit(): void {
+  nextBatch(e: any, offset: any) {
+    if(this.isEndOfList) {
+      return;
+    }
+    const end = this.cdkViewport.getRenderedRange().end;
+    const total = this.cdkViewport.getDataLength();
+    if(end === total) {
+      this.offset$.next(offset);
+    }
   }
+
+  trackById(id: number) {
+    return id;
+  }
+
+  ngOnInit(): void {}
   ngAfterViewInit() {
     this.list.forEach((el, i) => {
       el.nativeElement.classList.add(`animate__${this.animate[Math.floor(Math.random() * this.animate.length)]}`);
