@@ -13,9 +13,7 @@ interface MouseCoordinates {
     <canvas #circle></canvas>
   `,
   styles: [`
-    canvas {
-      border: 1px solid deepskyblue;
-    }
+
   `]
 
 })
@@ -30,9 +28,7 @@ export class CircleComponent implements OnInit {
 
   constructor(
     @Inject(DOCUMENT) document: Document
-  ) {
-  }
-
+  ) {}
 
   ngOnInit(): void {
     this.setup();

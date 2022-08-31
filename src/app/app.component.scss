@@ -1,0 +1,85 @@
+.box {
+  height: 40px;
+  width: 100px;
+  background-color: deeppink;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transform: skewY(-15deg);
+  position: relative;
+  transition: .5s;
+  &:before {
+    position: absolute;
+    left: -40px;
+    background-color: #888888;
+    content: "";
+    display: block;
+    width: 40px;
+    height: 40px;
+    transform-origin: right;
+    transform: skewY(45deg);
+    filter: brightness(.9);
+  }
+  &:after {
+    position: absolute;
+    filter: brightness(.9);
+    top: -40px;
+    background-color: #888888;
+    content: "";
+    display: block;
+    width: 100px;
+    height: 40px;
+    transform-origin: bottom;
+    transform: skewX(45deg);
+  }
+  &:hover {
+    transform: skewY(-15deg) translateX(-45px);
+  }
+}
+
+.ho {
+  .tab {
+    transition: .5s;
+  }
+  &:hover .tab {
+    transform: rotateX(180deg);
+  }
+}
+
+.d-flexs {
+  overflow: hidden;
+  background: deepskyblue;
+  padding-right: 10px;
+  width: fit-content;
+  .n-item {
+    width: 180px;
+    height: 60px;
+    background-color: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @mixin tada {
+      width: 30px;
+      height: 30px;
+      content: "";
+      position: absolute;
+      right: 0;
+      border-radius: 50%;
+    }
+    &.active {
+      position: relative;
+      background-color: deepskyblue;
+      &:before {
+        @include tada;
+        top: -30px;
+        box-shadow: 15px 15px 0 deepskyblue;
+      }
+      &:after {
+        @include tada;
+        bottom: -30px;
+        box-shadow: 15px -15px 0 deepskyblue;
+      }
+    }
+  }
+}

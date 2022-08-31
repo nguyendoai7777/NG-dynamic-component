@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TabEmitProps } from './components/tab-hard-rendering/tabs/tabs.model';
 import { HttpClient } from '@angular/common/http';
+import { createObject } from 'rxjs/internal/util/createObject';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -19,9 +21,14 @@ export class AppComponent implements OnInit {
 
   showT4 = true;
   fileContent = '';
-  constructor(private readonly cdr: ChangeDetectorRef,
-    private readonly http: HttpClient
-  ) {}
+  srcImg = '';
+
+  constructor(
+    private readonly cdr: ChangeDetectorRef,
+    private readonly http: HttpClient,
+    private readonly domSanitizer: DomSanitizer
+  ) {
+  }
 
   ngOnInit() {
 
@@ -38,22 +45,24 @@ export class AppComponent implements OnInit {
 
   change(fileEvent: Event) {
     const singleFileRaw = (fileEvent.target as unknown as DataTransfer).files[0];
-    this.placeFileContent(singleFileRaw)
+    const url = URL.createObjectURL(singleFileRaw);
+    this.srcImg = this.domSanitizer.bypassSecurityTrustUrl(url) as string;
+    this.placeFileContent(singleFileRaw);
   }
-  placeFileContent( file: any) {
+
+  placeFileContent(file: any) {
     this.readFile(file).then((content) => {
       this.fileContent = content as string;
-      console.log('teexxxt: ', content);
-    }).catch(error => console.log(error))
+    }).catch(error => console.log(error));
   }
 
   readFile(file: File) {
-    const reader = new FileReader()
+    const reader = new FileReader();
     return new Promise((resolve, reject) => {
-      reader.onload = event => resolve(event.target!.result)
-      reader.onerror = error => reject(error)
-      reader.readAsText(file)
-    })
+      reader.onload = event => resolve(event.target!.result);
+      reader.onerror = error => reject(error);
+      reader.readAsText(file);
+    });
   }
 }
 

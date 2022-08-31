@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 declare class WOW {
   boxes: any;
   init(): void;
@@ -8,16 +9,25 @@ declare class WOW {
 @Component({
   selector: 'wow',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ScrollingModule],
   template: `
-    <div  class="content-container" style="display: flex; flex-wrap: wrap;">
-      <div *ngFor="let _ of li; index as i" #list class="item wow animate__animated" data-wow-offset="10"></div>
+    <div class="d-flex">
+      <cdk-virtual-scroll-viewport itemSize="50" style="height: 70vh; width: 50%;">
+
+          <div *cdkVirtualFor="let ani of animate; index as i" #list [className]="'wow item animate__animated animate__' + ani"></div>
+
+      </cdk-virtual-scroll-viewport>
+
+      <div style="height: 70vh; width: 50%; overflow: auto">
+          <div *ngFor="let _ of li; index as i" class="item animated slideInRight animate__animated animate__slideInLeft" data-wow-offset="10"></div>
+        </div>
+
     </div>
   `,
   styles: [`
     .item {
       width: 420px;
-      height: 420px;
+      height: 50px;
       background: deeppink;
       margin: 20px;
     }

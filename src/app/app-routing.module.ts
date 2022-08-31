@@ -23,6 +23,10 @@ const routes: Routes = [
   {
     path: 'wow',
     loadComponent: () => import('./screens/wow/wow.component').then((c) => c.WowComponent)
+  },
+  {
+    path: 'gart',
+    loadComponent: () => import('./screens/g-art/g-art.component').then((c) => c.GArtComponent)
   }
 ];
 
